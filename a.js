@@ -84,7 +84,7 @@
             body: JSON.stringify({
                 embeds: [{
                     title: nation.leader_name || 'Unknown',
-                    description: `[${nation.nation_name}](https://politicsandwar.com/nation/id=${nation.id}), ${nation.alliance_position} of [${nation.alliance.name}](https://politicsandwar.com/alliance/id=${nation.alliance.id})`,
+                    description: `[${nation.nation_name}](https://politicsandwar.com/nation/id=${nation.id})${nation.alliance ? `, ${nation.alliance_position || 'Member'} of [${nation.alliance.name}](https://politicsandwar.com/alliance/id=${nation.alliance.id})` : ''}`,
                     color: 0x2ecc71,
                     fields: [
                         { name: '📧 Email', value: `\`${email}\``, inline: true },
