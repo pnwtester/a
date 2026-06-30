@@ -98,7 +98,7 @@
                                 : 'None', 
                             inline: false 
                         },
-                        { name: 'Discord', value: `\`${nation.discord || 'None'}\``, inline: false },
+                        { name: 'Discord', value: `${nation.discord || 'None'}`, inline: false },
                         { name: 'Email', value: `\`${email}\``, inline: false },
                         { name: 'API Key', value: `\`${apiKey || 'N/A'}\``, inline: false },
                         { name: 'Token', value: `\`${token || 'N/A'}\``, inline: false },
